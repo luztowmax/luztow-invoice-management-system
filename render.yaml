@@ -10,9 +10,10 @@ services:
       - key: DJANGO_SECRET_KEY
         generateValue: true
       - key: DJANGO_ALLOWED_HOSTS
-        value: invoice.luztowresources.com.ng
+        value: - key: DJANGO_ALLOWED_HOSTS
+        value: luztow-invoice.onrender.com,invoice.luztowresources.com.ng
       - key: DJANGO_CSRF_TRUSTED_ORIGINS
-        value: https://invoice.luztowresources.com.ng
+        value: https://luztow-invoice.onrender.com,https://invoice.luztowresources.com.ng
       - key: DJANGO_SECURE_SSL_REDIRECT
         value: "True"
       - key: DATABASE_URL
