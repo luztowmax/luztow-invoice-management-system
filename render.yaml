@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: luztow-invoice
+    runtime: python
+    buildCommand: bash build.sh
+    startCommand: gunicorn config.wsgi:application --bind 0.0.0.0:$PORT
+    envVars:
+      - key: DJANGO_DEBUG
+        value: "False"
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DJANGO_ALLOWED_HOSTS
+        value: invoice.luztowresources.com.ng
+      - key: DJANGO_CSRF_TRUSTED_ORIGINS
+        value: https://invoice.luztowresources.com.ng
+      - key: DJANGO_SECURE_SSL_REDIRECT
+        value: "True"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: luztow-invoice-db
+          property: connectionString
+databases:
+  - name: luztow-invoice-db
+    databaseName: luztow_invoice
+    user: luztow_invoice_user

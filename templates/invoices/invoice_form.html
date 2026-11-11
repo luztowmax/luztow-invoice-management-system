@@ -1,0 +1,119 @@
+
+{% extends 'base.html' %}
+
+{% block title %}Create Invoice{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <h2>Create Draft Invoice</h2>
+
+    <p class="text-muted">
+        Select an existing customer or enter a new customer name.
+        VAT of 7.5% applies to Service Charge only when enabled.
+    </p>
+
+    <form method="post" class="card p-4">
+
+        {% csrf_token %}
+
+        {{ form.non_field_errors }}
+
+        <!-- INVOICE DETAILS -->
+        <h4 class="mb-3">Invoice Details</h4>
+
+        <div class="row">
+
+            {% for field in form %}
+
+                <div class="col-md-6 mb-3">
+
+                    {% if field.name == 'apply_vat' %}
+
+                        <!-- VAT CHECKBOX -->
+                        <div class="form-check mt-3">
+
+                            {{ field }}
+
+                            <label class="form-check-label"
+                                   for="{{ field.id_for_label }}">
+                                Apply 7.5% VAT to Service Charge
+                            </label>
+
+                        </div>
+
+                    {% else %}
+
+                        <label class="form-label"
+                               for="{{ field.id_for_label }}">
+                            {{ field.label }}
+                        </label>
+
+                        {{ field }}
+
+                    {% endif %}
+
+                    <div class="text-danger">
+                        {{ field.errors }}
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+        <!-- INVOICE ITEMS -->
+        <h4 class="mt-4">Line Items</h4>
+
+        {{ formset.management_form }}
+        {{ formset.non_form_errors }}
+
+        {% for f in formset %}
+
+            <div class="row border-bottom py-3">
+
+                {% for field in f.visible_fields %}
+
+                    <div class="col-md-3 mb-2">
+
+                        <label class="form-label"
+                               for="{{ field.id_for_label }}">
+                            {{ field.label }}
+                        </label>
+
+                        {{ field }}
+
+                        <div class="text-danger">
+                            {{ field.errors }}
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+                {% for hidden in f.hidden_fields %}
+                    {{ hidden }}
+                {% endfor %}
+
+            </div>
+
+        {% endfor %}
+
+        <p class="small text-muted mt-3">
+            Three item rows are provided.
+            Leave unused rows blank.
+        </p>
+
+        <!-- SUBMIT -->
+        <button type="submit"
+                class="btn btn-primary mt-3">
+            Save Draft Invoice
+        </button>
+
+    </form>
+
+</div>
+
+{% endblock %}
